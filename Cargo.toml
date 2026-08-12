@@ -1,0 +1,23 @@
+[package]
+name        = "n6-npu-runtime"
+version     = "0.1.0"
+edition     = "2021"
+license     = "MIT OR Apache-2.0"
+description = "Multi-model runtime for the STM32N6 Neural-ART NPU: one device, many compiled schedules."
+
+[dependencies]
+# Pinned to the same rev as every other crate in this workspace. Cargo unifies
+# these with the application's copy; a mismatch here would silently produce two
+# NPU drivers fighting over the same peripheral.
+embassy-stm32 = { version = "0.6.0", git = "https://github.com/embassy-rs/embassy", rev = "83773dc8", features = [
+    "defmt",
+    "stm32n657x0",
+    "unstable-pac",
+] }
+embassy-time = { version = "0.5.1", git = "https://github.com/embassy-rs/embassy", rev = "83773dc8", features = ["defmt"] }
+
+defmt = "1.0.1"
+
+# Used by the bilinear-resize operator for `floorf`. Pure Rust, so the
+# coordinate transform is reproducible off-target for validation.
+libm = "0.2"
